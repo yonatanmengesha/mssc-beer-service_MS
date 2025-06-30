@@ -1,23 +1,25 @@
 package com.springmicroservice.jotech.mssc_beer_service_MS.bootstrap;
 
 import com.springmicroservice.jotech.mssc_beer_service_MS.domain.Beer;
-import com.springmicroservice.jotech.mssc_beer_service_MS.repositories.BeerRepository;
+import com.springmicroservice.jotech.mssc_beer_service_MS.service.BeerService;
+import com.springmicroservice.jotech.mssc_beer_service_MS.web.mappers.BeerMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@RequiredArgsConstructor
 @Component
 public class BeerLoader implements CommandLineRunner {
 
-    private final  BeerRepository beerRepository;
+    private final BeerService beerService;
+    private final BeerMapper beerMapper;
     public static final String  BEER_1_UPC = "0631234200036";
     public static final String   BEER_2_UPC = "0631234300019";
     public static final String  BEER_3_UPC = "0083783375213";
 
-    public BeerLoader(BeerRepository beerRepository) {
-        this.beerRepository = beerRepository;
-    }
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -27,18 +29,20 @@ public class BeerLoader implements CommandLineRunner {
 
     private void loadBeerObjects() {
 
-        if(beerRepository.count()==0){
-            beerRepository.save(Beer.
-                             builder()
+        if(beerService.count()==0){
+            beerService.saveNewBeer(beerMapper.beerToBeerDto(
+                    Beer.
+                            builder()
                             .beerName("Mango Bobs")
                             .beerStyle("IPA")
                             .quantityToBrew(200)
                             .minOnHand(12)
                             .upc(BEER_1_UPC)
                             .price(new BigDecimal("12.95"))
-                            .build());
+                            .build()));
 
-            beerRepository.save(Beer.
+
+            beerService.saveNewBeer(beerMapper.beerToBeerDto(Beer.
                     builder()
                     .beerName("Galaxy Cat")
                     .beerStyle("PALE_ALE")
@@ -46,9 +50,9 @@ public class BeerLoader implements CommandLineRunner {
                     .minOnHand(12)
                     .upc(BEER_2_UPC)
                     .price(new BigDecimal("11.95"))
-                    .build());
+                    .build()));
 
-            beerRepository.save(Beer.
+            beerService.saveNewBeer(beerMapper.beerToBeerDto(Beer.
                     builder()
                     .beerName("No Hammers On The Bar")
                     .beerStyle("PALE_ALE")
@@ -56,7 +60,7 @@ public class BeerLoader implements CommandLineRunner {
                     .minOnHand(12)
                     .upc(BEER_3_UPC)
                     .price(new BigDecimal("11.95"))
-                    .build());
+                    .build()));
         }
 
 

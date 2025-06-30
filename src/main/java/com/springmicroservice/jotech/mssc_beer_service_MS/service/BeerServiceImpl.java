@@ -44,4 +44,9 @@ public class BeerServiceImpl implements BeerService {
         beer.setUpc(beerDto.getUpc());
         return beerMapper.beerToBeerDto(beerRepository.save(beer));
     }
+
+    @Override
+    public Long count() {
+       return  beerRepository.count() ;
+    }
 }
